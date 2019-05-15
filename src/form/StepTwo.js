@@ -1,14 +1,7 @@
 import React from 'react';
 import { pathOr, isEmpty } from 'ramda';
 import { Formik, Form } from 'formik';
-import Button from '@material-ui/core/Button';
 import useFormStyles from '../hooks/useFormStyles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 const StepTwo = ({ onNext, onBack, currentStep, allStepsData }) => {
   const classes = useFormStyles();
@@ -20,38 +13,31 @@ const StepTwo = ({ onNext, onBack, currentStep, allStepsData }) => {
         return (
           <Form className={classes.form}>
             <div className={classes.fieldsArea}>
-              <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Choose Option A or B</FormLabel>
-                <RadioGroup
-                  name="optionValue" // set the name to the key 'optionValue'
-                  aria-label="options"
-                  className={classes.group}
-                  value={values.optionValue}
+              <div>Choose Option A or B</div>
+              <div>
+                <input
+                  type="radio"
+                  name="optionValue"
+                  value="optionA"
+                  checked={values.optionValue === "optionA"}
                   onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="optionA"
-                    control={<Radio color="primary" />}
-                    label="Option A"
-                  />
-                  <FormControlLabel
-                    value="optionB"
-                    control={<Radio color="primary" />}
-                    label="Option B"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <FormHelperText className={classes.helperText} variant="filled" error>
-                {pathOr('', ['optionValue'])(errors)}
-              </FormHelperText>
+                />Option A <br />
+                <input
+                  type="radio"
+                  name="optionValue"
+                  value="optionB"
+                  checked={values.optionValue === "optionB"}
+                  onChange={handleChange}
+                />Option B <br />
+              </div>
             </div>
             <div className={classes.buttonsArea}>
-              <Button name="back" variant="contained" onClick={onBack}>
+              <button name="back" variant="contained" onClick={onBack}>
                 Back
-              </Button>
-              <Button name="next" type="submit" variant="contained" color="primary">
+              </button>
+              <button name="next" type="submit" variant="contained" color="primary">
                 Next
-              </Button>
+              </button>
             </div>
           </Form>
         );

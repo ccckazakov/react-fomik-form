@@ -4,13 +4,13 @@ import StepFlow from './StepFlow';
 import useFormStyles from '../hooks/useFormStyles';
 
 const initialState = {
-  beforeStep: 0,
   currentStep: 1,
   allStepsData: {},
+  steps: [1, ],
 };
 
 // get the next step
-const nextStep = (currentStep, payload) => {
+const getNextStep = (currentStep, payload) => {
   if (currentStep === 2 && payload.optionValue === "optionB") return 6;
   if (currentStep === 3 && !payload.checkThree && (payload.checkOne || payload.checkTwo)) return 5;
   return currentStep + 1;
@@ -20,7 +20,7 @@ const nextStep = (currentStep, payload) => {
 export const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'next': {
-      const { currentStep, allStepsData } = state;
+      const { currentStep, allStepsData, steps } = state;
       const currentStepData = allStepsData[currentStep] || {};
 
       let newAllStepsData = {};
@@ -34,16 +34,26 @@ export const reducer = (state, { type, payload }) => {
       }
       newAllStepsData[currentStep] = payload;
 
+      const nextStep = getNextStep(currentStep, payload);
+      steps.push(nextStep);
+      console.log(steps);
+
       return {
+        steps,
         allStepsData: newAllStepsData,
-        beforeStep: currentStep,
-        currentStep: nextStep(currentStep, payload)
+        currentStep: nextStep
       };
     }
     case 'back':
+      const { allStepsData, steps } = state;
+
+      steps.pop();
+      const beforeStep = steps[steps.length - 1];
+      
       return {
-        ...state,
-        currentStep: state.beforeStep,
+        steps,
+        allStepsData,
+        currentStep: beforeStep,
       };
     default:
       return state;
@@ -67,14 +77,14 @@ const MultiStepForm = ({ children, showFlow }) => {
   // pring the log
   const printLog = () => {
     let log = [];
+    log.push(<div>{'{'}</div>);
     for (let i = 2; i < formState.currentStep; i++) {
       if (!formState.allStepsData[i]) continue;
-      let str = '';
       Object.keys(formState.allStepsData[i]).forEach(key => {
-        str += key + ': ' + formState.allStepsData[i][key] + ' ';
+        log.push(<div id={i}>&nbsp;&nbsp;&nbsp;&nbsp;{key}: {formState.allStepsData[i][key].toString()}</div>)
       })
-      log.push(<div key={i}>Step {i} ----- {str}</div>);
     }
+    log.push(<div>{'}'}</div>);
     return log;
   }
 

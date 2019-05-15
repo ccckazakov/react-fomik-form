@@ -1,11 +1,7 @@
 import React from 'react';
 import { pathOr } from 'ramda';
 import { Formik, Form } from 'formik';
-import Button from '@material-ui/core/Button';
 import useFormStyles from '../hooks/useFormStyles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormLabel from '@material-ui/core/FormLabel';
 
 const StepThree = ({ onNext, onBack, currentStep, allStepsData }) => {
   const classes = useFormStyles();
@@ -17,53 +13,20 @@ const StepThree = ({ onNext, onBack, currentStep, allStepsData }) => {
     <Formik initialValues={{ checkOne, checkTwo, checkThree }} onSubmit={onNext}>
       {({ values, errors, handleChange }) => {
         return (
-          <Form className={classes.form}>
-            <div className={classes.fieldsArea}>
-              <FormLabel component="legend">Choose Option 1, 2, 3</FormLabel>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="checkOne"
-                    checked={values.checkOne}
-                    onChange={handleChange}
-                    value="checkOne"
-                    color="primary"
-                  />
-                }
-                label="Option 1"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="checkTwo"
-                    checked={values.checkTwo}
-                    onChange={handleChange}
-                    value="checkTwo"
-                    color="primary"
-                  />
-                }
-                label="Option 2"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="checkThree"
-                    checked={values.checkThree}
-                    onChange={handleChange}
-                    value="checkThree"
-                    color="primary"
-                  />
-                }
-                label="Option 3"
-              />
+          <Form>
+            <div>
+              <div>Choose Option 1, 2, 3</div>
+              <input type="checkbox" name="checkOne" checked={values.checkOne} onChange={handleChange}/>Option 1<br />
+              <input type="checkbox" name="checkTwo" checked={values.checkTwo} onChange={handleChange}/>Option 2<br />
+              <input type="checkbox" name="checkThree" checked={values.checkThree} onChange={handleChange}/>Option 3<br />
             </div>
             <div className={classes.buttonsArea}>
-              <Button name="back" variant="contained" onClick={onBack}>
+              <button name="back" variant="contained" onClick={onBack}>
                 Back
-              </Button>
-              <Button name="next" type="submit" variant="contained" color="primary">
+              </button>
+              <button name="next" type="submit" variant="contained" color="primary">
                 Next
-              </Button>
+              </button>
             </div>
           </Form>
         );

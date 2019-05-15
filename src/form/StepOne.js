@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import useFormStyles from '../hooks/useFormStyles';
 
 const StepOne = ({ onNext }) => {
@@ -13,9 +12,9 @@ const StepOne = ({ onNext }) => {
 
       <div className={classes.buttonsArea}>
         <div />
-        <Button name="next" type="submit" variant="contained" color="primary" onClick={onNext}>
+        <button name="next" type="submit" color="primary" onClick={onNext}>
           Continue
-        </Button>
+        </button>
       </div>
     </div>
   );

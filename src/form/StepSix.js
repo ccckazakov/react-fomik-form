@@ -1,8 +1,7 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import useFormStyles from '../hooks/useFormStyles';
 
-const StepSix = ({ onSubmit }) => {
+const StepSix = ({ onBack, onSubmit }) => {
   const classes = useFormStyles();
 
   return (
@@ -12,10 +11,13 @@ const StepSix = ({ onSubmit }) => {
       </div>
 
       <div className={classes.buttonsArea}>
+        <button name="back" variant="contained" onClick={onBack}>
+          Back
+        </button>
         <div />
-        <Button name="next" type="submit" variant="contained" color="secondary" onClick={onSubmit}>
+        <button name="next" type="submit" variant="contained" color="secondary" onClick={onSubmit}>
           Submit
-        </Button>
+        </button>
       </div>
     </div>
   );
