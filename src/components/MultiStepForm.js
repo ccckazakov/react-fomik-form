@@ -72,8 +72,23 @@ const MultiStepForm = ({ children, showFlow }) => {
     console.log(str);
   });
 
+  const printLog = () => {
+    let log = [];
+    log.push(<div>{'{'}</div>);
+    for (let i = 2; i < formState.currentStep; i++) {
+      if (!formState.allStepsData[i]) continue;
+      Object.keys(formState.allStepsData[i]).forEach(key => {
+        log.push(<div id={i}>&nbsp;&nbsp;&nbsp;&nbsp;{key}: {formState.allStepsData[i][key].toString()}</div>)
+      })
+    }
+    log.push(<div>{'}'}</div>);
+    return log;
+  }
+
   const { currentStep, allStepsData } = formState;
   const currentStepComponent = children[currentStep - 1];
+
+  
 
   return (
     <>
@@ -85,6 +100,9 @@ const MultiStepForm = ({ children, showFlow }) => {
         allStepsData,
         currentStep,
       })}
+      <div>
+        {printLog()}
+      </div>
     </>
   );
 };
