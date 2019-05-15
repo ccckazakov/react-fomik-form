@@ -1,8 +1,4 @@
-import React, { useReducer, useCallback, useMemo, cloneElement } from 'react';
-import { equals } from 'ramda';
-import StepFlow from './StepFlow';
-import useFormStyles from '../hooks/useFormStyles';
-
+import React, { useReducer, useCallback, cloneElement } from 'react';
 const initialState = {
   currentStep: 1,
   allStepsData: {},
@@ -24,7 +20,7 @@ export const reducer = (state, { type, payload }) => {
       const currentStepData = allStepsData[currentStep] || {};
 
       let newAllStepsData = {};
-      if (!equals(currentStepData, payload)) {
+      if (currentStepData !== payload) {
         for (let i = 2; i < currentStep; i++) {
           if (i === 4 || i === 6) continue;
           newAllStepsData[i] = allStepsData[i];
@@ -36,7 +32,6 @@ export const reducer = (state, { type, payload }) => {
 
       const nextStep = getNextStep(currentStep, payload);
       steps.push(nextStep);
-      console.log(steps);
 
       return {
         steps,
@@ -65,32 +60,23 @@ const MultiStepForm = ({ children, showFlow }) => {
 
   const handleNext = useCallback(payload => dispatch({ type: 'next', payload }));
   const handleBack = useCallback(() => dispatch({ type: 'back' }));
-  const hanleSubmit = useCallback(() => console.log(formState));
-
-  const stepLabels = useMemo(() => children.map(child => child.props.label));
+  const hanleSubmit = useCallback(() => {
+    let str = '{\n';
+    for (let i = 2; i < formState.currentStep; i++) {
+      if (!formState.allStepsData[i]) continue;
+      Object.keys(formState.allStepsData[i]).forEach(key => {
+        str += '\t' + key + ': ' + formState.allStepsData[i][key] + '\n';
+      })
+    }
+    str += '}\n';
+    console.log(str);
+  });
 
   const { currentStep, allStepsData } = formState;
   const currentStepComponent = children[currentStep - 1];
 
-  const classes = useFormStyles();
-
-  // pring the log
-  const printLog = () => {
-    let log = [];
-    log.push(<div>{'{'}</div>);
-    for (let i = 2; i < formState.currentStep; i++) {
-      if (!formState.allStepsData[i]) continue;
-      Object.keys(formState.allStepsData[i]).forEach(key => {
-        log.push(<div id={i}>&nbsp;&nbsp;&nbsp;&nbsp;{key}: {formState.allStepsData[i][key].toString()}</div>)
-      })
-    }
-    log.push(<div>{'}'}</div>);
-    return log;
-  }
-
   return (
     <>
-      {showFlow && <StepFlow currentStep={currentStep} stepLabels={stepLabels} />}
       {cloneElement(currentStepComponent, {
         key: currentStepComponent.props.label,
         onNext: handleNext,
@@ -99,10 +85,6 @@ const MultiStepForm = ({ children, showFlow }) => {
         allStepsData,
         currentStep,
       })}
-      <div className={classes.log}>
-        Console
-        { printLog()  }
-      </div>
     </>
   );
 };

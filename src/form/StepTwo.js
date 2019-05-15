@@ -1,18 +1,17 @@
 import React from 'react';
-import { pathOr, isEmpty } from 'ramda';
-import { Formik, Form } from 'formik';
-import useFormStyles from '../hooks/useFormStyles';
+import { Formik, Form, ErrorMessage } from 'formik';
 
 const StepTwo = ({ onNext, onBack, currentStep, allStepsData }) => {
-  const classes = useFormStyles();
-  const optionValue = pathOr('', [currentStep, 'optionValue'])(allStepsData);
+  
+  let optionValue = '';
+  if (allStepsData[currentStep] && allStepsData[currentStep]['optionValue']) optionValue = allStepsData[currentStep]['optionValue']
 
   return (
     <Formik initialValues={{ optionValue }} onSubmit={onNext} validate={validator}>
       {({ values, errors, handleChange }) => {
         return (
-          <Form className={classes.form}>
-            <div className={classes.fieldsArea}>
+          <Form>
+            <div>
               <div>Choose Option A or B</div>
               <div>
                 <input
@@ -30,8 +29,9 @@ const StepTwo = ({ onNext, onBack, currentStep, allStepsData }) => {
                   onChange={handleChange}
                 />Option B <br />
               </div>
+              <ErrorMessage name="optionValue" />
             </div>
-            <div className={classes.buttonsArea}>
+            <div>
               <button name="back" variant="contained" onClick={onBack}>
                 Back
               </button>
@@ -51,7 +51,7 @@ export default StepTwo;
 export const validator = values => {
   let errors = {};
   
-  if (isEmpty(values.optionValue)) {
+  if (values.optionValue === '') {
     errors.optionValue = 'This is required. Please select Option A or B.';
   }
   return errors;

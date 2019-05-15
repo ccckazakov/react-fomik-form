@@ -1,13 +1,12 @@
 import React from 'react';
-import { pathOr } from 'ramda';
 import { Formik, Form } from 'formik';
-import useFormStyles from '../hooks/useFormStyles';
 
 const StepThree = ({ onNext, onBack, currentStep, allStepsData }) => {
-  const classes = useFormStyles();
-  const checkOne = pathOr('', [currentStep, 'checkOne'])(allStepsData);
-  const checkTwo = pathOr('', [currentStep, 'checkTwo'])(allStepsData);
-  const checkThree = pathOr('', [currentStep, 'checkThree'])(allStepsData);
+
+  let checkOne = false, checkTwo = false, checkThree = false;
+  if (allStepsData[currentStep] && allStepsData[currentStep]['checkOne']) checkOne = true;
+  if (allStepsData[currentStep] && allStepsData[currentStep]['checkTwo']) checkTwo = true;
+  if (allStepsData[currentStep] && allStepsData[currentStep]['checkThree']) checkThree = true;
 
   return (
     <Formik initialValues={{ checkOne, checkTwo, checkThree }} onSubmit={onNext}>
@@ -20,7 +19,7 @@ const StepThree = ({ onNext, onBack, currentStep, allStepsData }) => {
               <input type="checkbox" name="checkTwo" checked={values.checkTwo} onChange={handleChange}/>Option 2<br />
               <input type="checkbox" name="checkThree" checked={values.checkThree} onChange={handleChange}/>Option 3<br />
             </div>
-            <div className={classes.buttonsArea}>
+            <div>
               <button name="back" variant="contained" onClick={onBack}>
                 Back
               </button>
